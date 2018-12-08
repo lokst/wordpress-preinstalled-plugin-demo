@@ -1,3 +1,3 @@
-wordpress-plugin-demo
-=====================
-Demonstrates how to set up a new Wordpress installation with a pre-installed plugin.
+# wordpress-preinstalled-plugin-demo
+
+Demonstrates how to run a Wordpress Docker container with a pre-installed plugin. In this example, contact-form-7 is used as the example plugin: https://wordpress.org/plugins/contact-form-7/#installation
