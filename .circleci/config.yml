@@ -1,0 +1,40 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    working_directory: ~/wordpress_test
+    steps:
+      - checkout
+      - run:
+          name: install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
+      - run:
+          name: Bring up containers
+          command: |
+            docker-compose -f << parameters.docker-compose-file >> up -d
+      - run:
+          name: Wait for wordpress
+          command: dockerize -wait http://localhost:8080 -timeout 3m
+      - run:
+          name: Check permissions of wp-content dir
+          command: |
+            set -x
+            docker exec -ti wordpress_test_wordpress_1 bash -c "ls -al /var/www/html/"
+            docker exec -ti wordpress_test_wordpress_1 bash -c "ls -al /var/www/html/wp-content"
+            docker exec -ti wordpress_test_wordpress_1 bash -c "ls -al /var/www/html/wp-content/plugins"
+    - run:
+          name: Check that plugin was successfully copied to /var/www/html/wp-content/plugins/
+          command: |
+            set -x
+            docker exec -ti wordpress_test_wordpress_1 bash -c "ls -al /var/www/html/wp-content/plugins/contact-form-7"
+      - run:
+          name: Test wordpress language selection
+          command: |
+            curl -s -L http://localhost:8080/ | grep "Select a default language"
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build

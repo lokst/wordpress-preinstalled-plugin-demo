@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  wordpress:
+    image: wordpress:latest
+    depends_on:
+      - mysql
+    volumes:
+      - my-vol:/var/www/html
+      - ./:/usr/src/wordpress/wp-content/plugins/contact-form-7
+    ports:
+      - 8080:80
+      - 80:80
+    environment:
+      WORDPRESS_DB_PASSWORD: wordpress
+
+  mysql:
+    image: mariadb
+    environment:
+       MYSQL_ROOT_PASSWORD: wordpress
+       MYSQL_DATABASE: wordpress
+       MYSQL_USER: wordpress
+       MYSQL_PASSWORD: wordpress
+volumes:
+  my-vol:
