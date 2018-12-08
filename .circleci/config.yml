@@ -24,7 +24,7 @@ jobs:
             docker exec -ti wordpress_test_wordpress_1 bash -c "ls -al /var/www/html/"
             docker exec -ti wordpress_test_wordpress_1 bash -c "ls -al /var/www/html/wp-content"
             docker exec -ti wordpress_test_wordpress_1 bash -c "ls -al /var/www/html/wp-content/plugins"
-    - run:
+      - run:
           name: Check that plugin was successfully copied to /var/www/html/wp-content/plugins/
           command: |
             set -x
