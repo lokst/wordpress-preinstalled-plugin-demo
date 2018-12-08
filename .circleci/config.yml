@@ -13,7 +13,7 @@ jobs:
       - run:
           name: Bring up containers
           command: |
-            docker-compose -f << parameters.docker-compose-file >> up -d
+            docker-compose up -d
       - run:
           name: Wait for wordpress
           command: dockerize -wait http://localhost:8080 -timeout 3m
